@@ -42,12 +42,13 @@ export default {
         });
 
         if (response.status === 201) {
+          // Reset fields
           this.name = '';
           this.email = '';
           this.password = '';
           this.password_confirmation = '';
           alert('New account created.');
-          this.$router.push('/');
+          this.$router.go(-1);
         }
       } catch (error) {
         console.log(error);
