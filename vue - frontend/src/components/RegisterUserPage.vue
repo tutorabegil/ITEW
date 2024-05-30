@@ -1,27 +1,29 @@
 <template>
-  <div class="container">
-    <div class="form-wrapper">
+  <div class="splitter-container">
+    <div class="wrapper">
       <div class="logo">
         <img :src="require('@/assets/logo-ecommerce.png')" alt="E-commerce Logo">
       </div>
-      <h2 class="title">User Registration</h2>
+      <div class="text-center name">
+        User Registration
+      </div>
       <form @submit.prevent="registerUser" class="form">
-        <div class="form-group">
-          <input type="text" name="name" v-model="name" class="form-control" placeholder="Name" required>
+        <div class="form-field">
+          <input type="text" name="name" v-model="name" placeholder="Name">
         </div>
-        <div class="form-group">
-          <input type="email" name="email" v-model="email" class="form-control" placeholder="Email" required>
+        <div class="form-field">
+          <input type="email" name="email" v-model="email" placeholder="Email">
         </div>
-        <div class="form-group">
-          <input type="password" name="password" v-model="password" class="form-control" placeholder="Password" required>
+        <div class="form-field">
+          <input type="password" name="password" v-model="password" placeholder="Password">
         </div>
-        <div class="form-group">
-          <input type="password" name="password_confirmation" v-model="password_confirmation" class="form-control" placeholder="Confirm Password" required>
+        <div class="form-field">
+          <input type="password" name="password_confirmation" v-model="password_confirmation" placeholder="Confirm Password">
         </div>
         <button type="submit" class="btn">Register</button>
       </form>
-      <div class="login-link">
-        <p>Already have an account? <router-link to="/" class="link">Login here!</router-link></p>
+      <div class="text-center">
+        <p>Already have an account? <router-link to="/" class="link-sign">Login here!</router-link></p>
       </div>
     </div>
   </div>
@@ -68,15 +70,15 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.splitter-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f2f5;
+  background-color: #f0f0f0;
 }
 
-.form-wrapper {
+.wrapper {
   width: 100%;
   max-width: 400px;
   padding: 20px;
@@ -87,13 +89,12 @@ export default {
 }
 
 .logo img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
+  width: 100px;
+  height: 100px;
   margin-bottom: 20px;
 }
 
-.title {
+.name {
   font-size: 1.5rem;
   margin-bottom: 20px;
   color: #333;
@@ -104,11 +105,11 @@ export default {
   flex-direction: column;
 }
 
-.form-group {
+.form-field {
   margin-bottom: 15px;
 }
 
-.form-control {
+.form-field input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -132,18 +133,17 @@ export default {
   background-color: #0056b3;
 }
 
-.login-link {
-  margin-top: 20px;
+.text-center {
   font-size: 0.9rem;
   color: #333;
 }
 
-.login-link a {
+.link-sign {
   color: #007bff;
   text-decoration: none;
 }
 
-.login-link a:hover {
+.link-sign:hover {
   text-decoration: underline;
 }
 </style>

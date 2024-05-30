@@ -1,21 +1,23 @@
 <template>
-  <div class="container">
-    <div class="login-wrapper">
+  <div class="splitter-container">
+    <div class="wrapper">
       <div class="logo">
-        <img :src="require('@/assets/logo-ecommerce.png')" alt="E-commerce Logo" class="logo-img">
+        <img :src="require('@/assets/logo-ecommerce.png')" alt="E-commerce Logo" class="imglog">
       </div>
-      <h2 class="title">Login</h2>
-      <form @submit.prevent="login" class="login-form">
-        <div class="form-group">
-          <input type="text" name="email" v-model="email" class="form-control" placeholder="Email" required>
+      <div class="text-center name">
+        Login
+      </div>
+      <form @submit.prevent="login" class="form">
+        <div class="form-field">
+          <input type="text" name="email" v-model="email" placeholder="Email" required>
         </div>
-        <div class="form-group">
-          <input type="password" name="password" v-model="password" class="form-control" placeholder="Password" required>
+        <div class="form-field">
+          <input type="password" name="password" v-model="password" placeholder="Password" required>
         </div>
         <button type="submit" class="btn">Login</button>
       </form>
-      <div class="register-link">
-        <p>Don't have an account? <router-link to="/register">Sign up here!</router-link></p>
+      <div class="text-center">
+        <p>Don't have an account? <router-link to="/register" class="link-sign">Sign up here!</router-link></p>
       </div>
     </div>
   </div>
@@ -55,51 +57,45 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.splitter-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #f0f2f5;
+  background-color: #f0f0f0;
 }
 
-.login-wrapper {
+.wrapper {
   width: 100%;
-  max-width: 350px;
+  max-width: 400px;
   padding: 20px;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-.logo {
+.logo img {
+  width: 100px;
   margin-bottom: 20px;
 }
 
-.logo-img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.title {
+.name {
   font-size: 1.5rem;
   margin-bottom: 20px;
   color: #333;
 }
 
-.login-form {
+.form {
   display: flex;
   flex-direction: column;
 }
 
-.form-group {
+.form-field {
   margin-bottom: 15px;
 }
 
-.form-control {
+.form-field input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -123,18 +119,17 @@ export default {
   background-color: #0056b3;
 }
 
-.register-link {
-  margin-top: 20px;
+.text-center {
   font-size: 0.9rem;
   color: #333;
 }
 
-.register-link a {
+.link-sign {
   color: #007bff;
   text-decoration: none;
 }
 
-.register-link a:hover {
+.link-sign:hover {
   text-decoration: underline;
 }
 </style>
