@@ -1,34 +1,27 @@
 <template>
-  <div class="splitter-container">
-    <div class="background-image"></div>
-    <div class="wrapper">
+  <div class="container">
+    <div class="form-wrapper">
       <div class="logo">
-        <!-- Background image is set in CSS -->
+        <img :src="require('@/assets/logo-ecommerce.png')" alt="E-commerce Logo">
       </div>
-      <div class="text-center mt-4 name">
-        User Registration
-      </div>
-      <form @submit.prevent="registerUser" class="p-3 mt-3">
-        <div class="form-field d-flex align-items-center">
-          <span class="far fa-user"></span>
-          <input type="text" name="name" v-model="name" class="form-control" placeholder="Name">
+      <h2 class="title">User Registration</h2>
+      <form @submit.prevent="registerUser" class="form">
+        <div class="form-group">
+          <input type="text" name="name" v-model="name" class="form-control" placeholder="Name" required>
         </div>
-        <div class="form-field d-flex align-items-center">
-          <span class="far fa-envelope"></span>
-          <input type="email" name="email" v-model="email" class="form-control" placeholder="Email">
+        <div class="form-group">
+          <input type="email" name="email" v-model="email" class="form-control" placeholder="Email" required>
         </div>
-        <div class="form-field d-flex align-items-center">
-          <span class="fas fa-key"></span>
-          <input type="password" name="password" v-model="password" class="form-control" placeholder="Password">
+        <div class="form-group">
+          <input type="password" name="password" v-model="password" class="form-control" placeholder="Password" required>
         </div>
-        <div class="form-field d-flex align-items-center">
-          <span class="fas fa-key"></span>
-          <input type="password" name="password_confirmation" v-model="password_confirmation" class="form-control" placeholder="Confirm Password">
+        <div class="form-group">
+          <input type="password" name="password_confirmation" v-model="password_confirmation" class="form-control" placeholder="Confirm Password" required>
         </div>
-        <button type="submit" class="btn mt-3">Register</button>
+        <button type="submit" class="btn">Register</button>
       </form>
-      <div class="text-center fs-6">
-        <p class="mt-3">Already have an account? <router-link to="/" class="link-sign">Login here!</router-link></p>
+      <div class="login-link">
+        <p>Already have an account? <router-link to="/" class="link">Login here!</router-link></p>
       </div>
     </div>
   </div>
@@ -75,147 +68,82 @@ export default {
 </script>
 
 <style scoped>
-.splitter-container {
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0; /* Ensure a background color in case the image doesn't load */
-  position: relative;
+  background-color: #f0f2f5;
 }
 
-.background-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('https://antdisplay.com/pub/media/wysiwyg/63.jpg');
-  background-size: cover;
-  background-position: center;
-  z-index: -1; /* Place it behind other content */
-}
-
-.wrapper {
+.form-wrapper {
   width: 100%;
   max-width: 400px;
-  padding: 40px 30px 30px 30px;
-  background-color: rgba(236, 240, 243, 0.9);
-  border-radius: 15px;
-  box-shadow: 13px 13px 20px #cbced1;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.logo img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  position: relative; /* Ensure the wrapper is above the background image */
-  z-index: 1;
 }
 
-.logo {
-  width: 120px;
-  height: 120px;
-  background-image: url('@/assets/logo-ecommerce.png');
-  background-size: cover;
-  background-position: center;
-  border-radius: 50%;
-  margin: 0 auto;
-  box-shadow: 0px 0px 3px #5f5f5f,
-              0px 0px 0px 5px #ecf0f3,
-              8px 8px 15px #a7aaa7,
-              -8px -8px 15px #fff;
+.form-group {
+  margin-bottom: 15px;
 }
 
-.name {
-  font-weight: 600;
-  font-size: 1.4rem;
-  letter-spacing: 1.3px;
-  color: #555;
-}
-
-.form-field input {
+.form-control {
   width: 100%;
-  display: block;
-  border: none;
-  outline: none;
-  background: none;
-  font-size: 1.2rem;
-  color: #666;
-  padding: 10px 15px 10px 10px;
-}
-
-.form-field {
-  width: 100%;
-  padding-left: 10px;
-  margin-bottom: 20px;
-  border-radius: 20px;
-  box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
-}
-
-.form-field .fas,
-.form-field .far {
-  color: #555;
-}
-
-.form-field input:focus {
-  box-shadow: none;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
 .btn {
   width: 100%;
-  height: 40px;
-  letter-spacing: 1.3px;
-  border-radius: 25px;
-  font-size: 18px;
-  box-shadow: rgba(45, 35, 66, 0.5) 0 2px 4px, rgba(45, 35, 66, 0.5) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-  background-color: #808080; /* Changed to gray */
+  padding: 10px;
+  background-color: #007bff;
   border: none;
+  border-radius: 5px;
   color: white;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s;
 }
 
 .btn:hover {
-  background: linear-gradient(to bottom, #a9a9a9, white); /* Adjusted for a gray gradient */
-  color: black;
-  border: 1px solid #696969; /* Adjusted border color */
-  transform: scale(1.02);
-  border-radius: 5rem;
+  background-color: #0056b3;
 }
 
-a {
+.login-link {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.login-link a {
+  color: #007bff;
   text-decoration: none;
-  font-size: 0.8rem;
-  font-size: 1rem;
-  color: rgb(5, 99, 193); 
 }
 
-a:hover {
+.login-link a:hover {
   text-decoration: underline;
-  transform: scale(1.1); 
-  color: #039BE5;
-}
-
-@media(max-width: 768px) {
-  .background-image {
-    display: none; 
-  }
-
-  .wrapper {
-    padding: 20px; 
-  }
-}
-
-@media(max-width: 480px) {
-  .logo {
-    width: 120px;
-    height: 120px;
-  }
-
-  .name {
-    font-size: 1.2rem; 
-  }
-
-  .btn {
-    font-size: 16px; 
-  }
 }
 </style>
