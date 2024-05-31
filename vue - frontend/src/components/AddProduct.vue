@@ -2,36 +2,53 @@
   <div>
     <NavBar></NavBar>
     <div class="splitter-container">
-      <!-- Wrapper -->
+      <!-- Content -->
       <div class="wrapper">
-        <div class="text-center mt-4 name">
-          Add Product
-        </div>
-        <form @submit.prevent="addProduct" class="p-3 mt-3">
-          <div class="form-field d-flex align-items-center mb-3">
-            <span class="fas fa-tag"></span>
-            <input type="text" class="form-control" id="name" v-model="name" placeholder="Enter name" required>
-          </div>
-          <div class="form-field d-flex align-items-center mb-3">
-            <span class="fas fa-info-circle"></span>
-            <textarea class="form-control" v-model="description" id="description" rows="3" placeholder="Description" required></textarea>
-          </div>
+        <h1>Edit Product</h1>
+        <form @submit.prevent="updateProduct">
+          <div class="d-flex flex-column container">
+            <label for="name">Name</label>
+            <div class="form-group mb-2">
+              <input type="text" class="form-control form-control-lg" name="name" v-model="name" placeholder="Name" id="name">
+            </div>
 
-          <div class="form-field d-flex align-items-center mb-3">
-            <span class="fas fa-dollar-sign"></span>
-            <input type="number" class="form-control" step="0.01" v-model="price" placeholder="Price" required />
-          </div>
+            <div class="form-group mb-2">
+              <label for="description">Description</label>
+              <textarea class="form-control form-control-lg" name="description" id="description" v-model="description" cols="30" rows="10"></textarea>
+            </div>
 
-          <div class="form-field d-flex align-items-center mb-3">
-            <span class="fas fa-boxes"></span>
-            <input type="number" class="form-control" v-model="stocks" placeholder="Stocks" required>
-          </div>
+            <div class="form-group mb-2">
+              <label for="price">Price</label>
+              <input type="number" step="0.01" class="form-control form-control-lg" name="price" v-model="price" placeholder="Price" id="price" />
+            </div>
 
-          <div class="d-flex align-items-center justify-content-center">
-            <button type="submit" class="btn mt-3 btn-success">Save</button>
-            <router-link to="/home" class="btn mt-3 btn-secondary ml-2">Cancel</router-link>
+            <div class="form-group mb-2">
+              <label for="stocks">Stocks</label>
+              <input type="number" class="form-control form-control-lg" name="stocks" v-model="stocks" placeholder="Stocks" id="stocks">
+            </div>
+
+            <div class="d-flex align-items-center justify-content-center">
+              <button type="submit" class="btn btn-gray m-2">Update</button>
+              <router-link to="/home" class="btn btn-secondary">Cancel</router-link>
+            </div>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div v-if="showErrorModal" class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+          <div class="modal-header">
+          </div>
+          <div class="modal-body">
+            <p>{{ errorMessage }}</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" @click="closeErrorModal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -45,59 +62,105 @@ export default {
   components: {
     NavBar
   },
-  methods: {
-    async addProduct() {
-      try {
-        // check if product already exists
-        let products = this.$store.getters.getProducts;
-        for (let i = 0; i < products.length; i++) {
-          if (this.name.toLowerCase() === products[i].name.toLowerCase()) {
-            throw "Product already exists";
-          }
-        }
-        const response = await axios.post('/api/products/store', {
-          name: this.name,
-          description: this.description,
-          stocks: this.stocks,
-          user_id: this.$store.getters.getAccountDetails.id,
-          price: this.price
-        });
-
-        if (response.status === 201) {
-          this.$store.dispatch('asyncAddProduct', response.data.product);
-          alert('Product created');
-
-          this.$router.push('/home');
-        }
-      } catch (error) {
-        alert(error);
-      }
-    }
-  },
   data() {
     return {
       name: '',
       description: '',
       price: 0.00,
-      stocks: 0
-    };
+      stocks: 0,
+      originalProduct: {},
+      errorMessage: '',
+      showErrorModal: false
+    }
+  },
+
+  async beforeMount() {
+    try {
+      const response = await axios.get('/api/show/' + this.$route.params.id);
+      let data = response.data.product;
+      if (response.status == 200) {
+        this.name = data.name;
+        this.description = data.description;
+        this.price = data.price;
+        this.stocks = data.stocks;
+        this.originalProduct = { ...data };
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  methods: {
+    back() {
+      this.$router.go(-1);
+    },
+
+    async updateProduct() {
+      try {
+        // Check if any field has changed
+        if (this.name === this.originalProduct.name &&
+            this.description === this.originalProduct.description &&
+            this.price === this.originalProduct.price &&
+            this.stocks === this.originalProduct.stocks) {
+          this.errorMessage = 'Please change or update.';
+          this.showErrorModal = true;
+          return;
+        }
+        let payload = {
+          name: this.name,
+          description: this.description,
+          price: this.price,
+          stocks: this.stocks,
+          id: this.$route.params.id
+        }
+        let count = 0;
+        for (let i = 0; i < this.$store.getters.getProducts.length; i++) {
+          if (this.$store.getters.getProducts[i].name.toLowerCase() === payload.name.toLowerCase()) {
+            count++;
+          }
+        }
+
+        if (count > 1) {
+          throw new Error("Product name already exists");
+        }
+
+        const response = await axios.put('/api/products/update/' + this.$route.params.id, {
+          name: this.name,
+          description: this.description,
+          price: this.price,
+          stocks: this.stocks
+        });
+
+        if (response.status == 200) {
+          this.$store.dispatch('asyncUpdateProduct', payload);
+          this.name = '';
+          this.description = '';
+          this.price = 0.00;
+          this.stocks = 0;
+          alert('Product updated');
+          this.$router.go(-1);
+        }
+      } catch (error) {
+        this.errorMessage = error.message || 'An error occurred';
+        this.showErrorModal = true;
+      }
+    },
+
+    closeErrorModal() {
+      this.showErrorModal = false;
+    }
   }
-};
+}
 </script>
-
-
 <style scoped>
 .splitter-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0; /* Optional background color */
 }
 
 .wrapper {
-  width: 100%;
-  max-width: 400px;
   padding: 40px 30px 30px 30px;
   background-color: #ecf0f3;
   border-radius: 15px;
@@ -107,85 +170,65 @@ export default {
   justify-content: center;
 }
 
-.name {
-  font-weight: 600;
-  font-size: 1.4rem;
-  letter-spacing: 1.3px;
-  padding-left: 10px;
-  color: #555;
+textarea {
+  height: 120px; /* Adjust the height as needed */
+  resize: none; /* Prevent resizing by user */
 }
 
-.form-field input,
-.form-field textarea {
+/* Modal styles */
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
   width: 100%;
-  display: block;
-  border: none;
-  outline: none;
-  background: none;
-  font-size: 1.2rem;
-  color: #666;
-  padding: 10px 15px 10px 10px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.form-field {
-  padding-left: 10px;
-  margin-bottom: 20px;
-  border-radius: 20px;
-  box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+.modal-wrapper {
+  width: 300px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  border-radius: 8px;
 }
 
-.form-field .fas {
-  color: #555;
+.modal-container {
+  padding: 20px;
 }
 
-.form-field input:focus,
-.form-field textarea:focus {
-  box-shadow: none;
-}
-
-.btn {
-  width: 100%;
-  height: 40px;
-  letter-spacing: 1.3px;
-  border-radius: 25px;
+.modal-header {
+  font-weight: bold;
   font-size: 18px;
-  box-shadow: rgba(45, 35, 66, 0.5) 0 2px 4px, rgba(45, 35, 66, 0.5) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-  background-color: #6c757d; /* Changed to gray */
-  border: none;
+  margin-bottom: 10px;
+}
+
+.modal-body {
+  margin-bottom: 20px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-footer .btn {
+  margin-left: 10px;
+}
+
+/* Button Styles */
+.btn {
+  background-color: #808080; /* Changed to gray */
+  border-color: #808080; /* Changed to gray */
   color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.btn-success:hover,
-.btn-secondary:hover {
-  background: #5a6268; /* Darker gray for hover effect */
-  color: white;
-  border: 1px solid #444;
-  transform: scale(1.02);
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-}
-
-.btn-secondary:hover {
-  background-color: #5a6268;
-}
-
-@media(max-width: 768px) {
-  .wrapper {
-    padding: 20px;
-  }
-}
-
-@media(max-width: 480px) {
-  .name {
-    font-size: 1.2rem;
-  }
-
-  .btn {
-    font-size: 16px;
-  }
+.btn:hover {
+  background-color: #a9a9a9; /* Lighter gray on hover */
+  border-color: #a9a9a9; /* Lighter gray on hover */
+  color: black;
 }
 </style>
