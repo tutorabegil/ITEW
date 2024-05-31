@@ -37,6 +37,7 @@
   </div>
 </template>
 
+
 <script>
 import axios from '@/lib/axios';
 import NavBar from '@/components/NavBar.vue';
@@ -98,20 +99,15 @@ export default {
 .wrapper {
   width: 100%;
   max-width: 400px;
-  padding: 40px 30px 30px 30px;
+  padding: 30px;
   background-color: #ecf0f3;
-  border-radius: 15px;
-  box-shadow: 13px 13px 20px #cbced1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .name {
   font-weight: 600;
   font-size: 1.4rem;
-  letter-spacing: 1.3px;
-  padding-left: 10px;
   color: #555;
 }
 
@@ -124,33 +120,26 @@ export default {
   background: none;
   font-size: 1.2rem;
   color: #666;
-  padding: 10px 15px 10px 10px;
+  padding: 10px;
 }
 
 .form-field {
-  padding-left: 10px;
   margin-bottom: 20px;
-  border-radius: 20px;
-  box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-field .fas {
   color: #555;
 }
 
-.form-field input:focus,
-.form-field textarea:focus {
-  box-shadow: none;
-}
-
 .btn {
   width: 100%;
   height: 40px;
-  letter-spacing: 1.3px;
-  border-radius: 25px;
+  border-radius: 20px;
   font-size: 18px;
-  box-shadow: rgba(45, 35, 66, 0.5) 0 2px 4px, rgba(45, 35, 66, 0.5) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-  background-color: #6c757d; /* Changed to gray */
+  background-color: #6c757d;
   border: none;
   color: white;
   cursor: pointer;
@@ -159,9 +148,8 @@ export default {
 
 .btn-success:hover,
 .btn-secondary:hover {
-  background: #5a6268; /* Darker gray for hover effect */
+  background: #5a6268;
   color: white;
-  border: 1px solid #444;
   transform: scale(1.02);
 }
 
@@ -171,12 +159,6 @@ export default {
 
 .btn-secondary:hover {
   background-color: #5a6268;
-}
-
-@media(max-width: 768px) {
-  .wrapper {
-    padding: 20px;
-  }
 }
 
 @media(max-width: 480px) {
