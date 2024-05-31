@@ -2,7 +2,7 @@
   <div class="splitter-container">
     <div class="wrapper">
       <div class="logo">
-        <img :src="require('@/assets/logo-ecommerce.png')" alt="E-commerce Logo">
+        <img :src="require('@/assets/logo1.png')" alt="E-commerce Logo">
       </div>
       <div class="text-center name">
         User Registration
