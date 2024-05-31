@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <button class="navbar-brand btn-link">
-          <img :src="require('@/assets/logo-ecommerce.png')" width="30" height="30" alt="">
+          <img :src="require('@/assets/logo1.png')" width="30" height="30" alt="">
           SHAPEPEE
       </button>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
